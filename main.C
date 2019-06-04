@@ -1,6 +1,6 @@
 #include <UniversalTime.hh>
 int main() {
-  UniversalTime timeobj(10, 400000, 10);
+  UniversalTime timeobj(10, 800000, 10);
   cout << timeobj.GetSeconds() << endl;
   cout << timeobj.GetDays() << endl;
 
