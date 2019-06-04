@@ -63,7 +63,7 @@ public:
   ///
   /// @param[in] rhs to add
   /// @return new universal time
-  UniversalTime operator+( const UniversalTime& rhs ) const { return UniversalTime(*this) += rhs; }
+  UniversalTime& operator+( const UniversalTime& rhs ) const { return UniversalTime(*this) += rhs; }
 
   /// Subtract a universal time to this
   ///
@@ -75,7 +75,7 @@ public:
   ///
   /// @param[in] rhs to subtract
   /// @return new universal time
-  UniversalTime operator-( const UniversalTime& rhs ) const { return UniversalTime(*this) -= rhs; }
+  UniversalTime& operator-( const UniversalTime& rhs ) const { return UniversalTime(*this) -= rhs; }
 
   /// Check if this time is the same as another
   ///
@@ -164,6 +164,7 @@ UniversalTime::operator+=( const UniversalTime& rhs )
 inline UniversalTime&
 UniversalTime::operator-=( const UniversalTime& rhs )
 {
+  cout << "running here" << endl;
   nanoSeconds -= rhs.nanoSeconds;
   seconds -= rhs.seconds;
   days -= rhs.days;
@@ -183,13 +184,23 @@ UniversalTime::operator<( const UniversalTime& rhs ) const
 inline void
 UniversalTime::Normalise()
 {
-  cout << "Renormalizing .."  << endl;
+  cout << "Renormalizing ..."  << endl;
+//  //Begin testing
+//  cout << nanoSeconds << endl;
+//  cout << seconds << endl;
+//  cout << days << endl;
+//  //End testing
+  
   const int overflowSeconds = static_cast<int>( nanoSeconds / 1e9 ); // Floors
   seconds += overflowSeconds;
   nanoSeconds -= overflowSeconds * 1e9;
   const int overflowDays = static_cast<int>( seconds / ( 60.0 * 60.0 * 24.0 ) );
   days += overflowDays;
   seconds -= overflowDays * 60.0 * 60.0 * 24.0;
+
+  //Begin testing
+  
+  //End testing
 }
 
 #endif
