@@ -77,9 +77,7 @@ public:
   ///
   /// @param[in] rhs to subtract
   /// @return new universal time
-  UniversalTime& operator-( const UniversalTime& rhs ) const { 
-    (*this) -= rhs; 
-    return *this;}
+  UniversalTime& operator--( const UniversalTime& rhs ) const { return UniversalTime(*this) -= rhs; }
 
   /// Check if this time is the same as another
   ///
@@ -223,9 +221,53 @@ UniversalTime::Normalise()
 
   //Begin testing
 
-  nanoSeconds = (days * ( 60.0 * 60.0 * 24.0 ) + seconds) * 1.0e9 + nanoSeconds;
-  seconds = 0;
-  days = 0;
+//If events are in order, proceed normally correcting for negative times
+if (TimeOrder())
+  {
+//  cout << "IN ORDER" << endl;
+  if (nanoSeconds < 0.0)
+    {
+    seconds -= 1;
+    nanoSeconds += 1.0e9;
+    }
+  if (seconds < 0)
+    {
+    days -= 1;
+    seconds += 86400;
+    }
+//  if (days < 0)
+//    {
+//    days = -1 * days;
+//    }
+  }
+
+if (!TimeOrder())
+  {
+//  cout << "NOT IN ORDER" << endl;
+  if (nanoSeconds > 0.0)
+    {
+    seconds += 1;
+    nanoSeconds = nanoSeconds - 1.0e9;
+    }
+  if (seconds > 0)
+    {
+    days += 1;
+    seconds = seconds - 86400;
+    }
+//  nanoSeconds = fabs(nanoSeconds);
+//  seconds = fabs(seconds);
+//  days = fabs(days);
+  }
+
+
+//  cout << "After negative treatment: " << endl;
+//  cout << nanoSeconds << " " << typeid(nanoSeconds).name() << endl;
+//  cout << seconds << " " << typeid(seconds).name() << endl;
+//  cout << days << " " << typeid(days).name() << endl;
+//  cout << "" << endl;
+
+
+  //End testing
   
   const int overflowSeconds = static_cast<int>( nanoSeconds / 1.0e9 ); // Floors
   seconds += overflowSeconds;

@@ -1,16 +1,25 @@
-#include <./UniversalTime.hh>
+#include "UniversalTime_jake.hh"
+#include <TRandom3>
 
 int main() {
 
-  UniversalTime e1time(0, 62310, 1.5477e06);
-  UniversalTime e2time(0, 62309, 9.93522e08);
 
-  e1time-=e2time;
-  
-  cout << "In main(): " << endl; 
-  cout << e1time.GetNanoSeconds() << endl;
-  cout << e1time.GetSeconds() << endl;
-  cout << e1time.GetDays() << endl;
+TRandom3 * ran = new TRandom3(5);
+
+for (int n=0; n<90000; n++ ) {
+
+  Int_t day = 2*(int(ran->Rndm()*100)-50);
+  Int_t sec = 2*(int(ran->Rndm()*100000)-50000);
+  Double_t nanosec= (ran->Rndm()-0.5)*2e9;
+
+///  cout << day << " " <<sec <<" " << nanosec << endl;
+  UniversalTime e1time(day, sec, nanosec);
+
+//  cout << e1time.GetDays() << " ";
+//  cout << e1time.GetSeconds() <<" ";
+//  cout << e1time.GetNanoSeconds() << endl;
+//  cout << "  " << endl;
+}
 
   return 0;
 }
